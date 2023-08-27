@@ -4,8 +4,9 @@ from day_03.binary_diagnostic import BinaryDiagnostic
 
 
 class LifeSupportDiagnostic(BinaryDiagnostic):
+    @staticmethod
     def get_last_occurrence_index(
-        self, estimated_frequency: List[int], search_value: int
+        estimated_frequency: List[int], search_value: int
     ) -> int:
         new_estimated_frequency = estimated_frequency.copy()
         new_estimated_frequency.reverse()
@@ -13,9 +14,9 @@ class LifeSupportDiagnostic(BinaryDiagnostic):
         last_index = len(new_estimated_frequency) - 1 - reverse_index
         return last_index
 
-    def get_generator_number(
+    def get_generator_rating(
         self, find_max_value: bool = True, find_min_value: bool = False
-    ) -> List[str]:
+    ) -> Optional[str]:
         diagnosed_values = self.diagnostic_report.copy()
 
         for index in range(len(self.diagnostic_report)):
@@ -47,19 +48,9 @@ class LifeSupportDiagnostic(BinaryDiagnostic):
                     between_grade_diagnosed_values.append(_value)
 
             diagnosed_values = between_grade_diagnosed_values.copy()
-        return diagnosed_values
-
-    def get_oxygen_generator_number(self) -> Optional[str]:
-        diagnosed_values = self.get_generator_number(find_max_value=True)
-
-        return diagnosed_values[0] if diagnosed_values else None
-
-    def get_co2_scrubber_rating(self) -> Optional[str]:
-        diagnosed_values = self.get_generator_number(find_min_value=True)
-
         return diagnosed_values[0] if diagnosed_values else None
 
     def __call__(self, *args, **kwargs) -> int:
-        oxygen_generator_number = self.get_oxygen_generator_number()
-        co2_scrubber_rating = self.get_co2_scrubber_rating()
-        return int(oxygen_generator_number, 2) * int(co2_scrubber_rating, 2)
+        oxygen_generator_rating = self.get_generator_rating(find_max_value=True)
+        co2_scrubber_rating = self.get_generator_rating(find_min_value=True)
+        return int(oxygen_generator_rating, 2) * int(co2_scrubber_rating, 2)
