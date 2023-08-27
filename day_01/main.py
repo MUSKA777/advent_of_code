@@ -4,7 +4,7 @@ from part_02 import Part02
 
 
 def main():
-    csv_data_manager = CSVDataManager()
+    csv_data_manager = CSVDataManager(is_preferred_value_str=False)
     depth_data = csv_data_manager.get_list_from_csv(file_path='measurements.csv')
     part_01 = Part01(depth_data=depth_data)
 
