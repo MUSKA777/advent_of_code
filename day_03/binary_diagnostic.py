@@ -6,7 +6,7 @@ class BinaryDiagnostic:
         self.diagnostic_report = diagnostic_report
 
     @staticmethod
-    def get_frequency_of_individual_bits(list_of_bits):
+    def get_frequency_of_individual_bits(list_of_bits: List[str]):
         frequency_of_individual_bits: List[List[int]] = []
         for _value in list_of_bits:
 
@@ -22,7 +22,9 @@ class BinaryDiagnostic:
         return frequency_of_individual_bits
 
     def get_gamma_rate_binary(self) -> str:
-        frequency_of_individual_bits = self.get_frequency_of_individual_bits(list_of_bits=self.diagnostic_report)
+        frequency_of_individual_bits = self.get_frequency_of_individual_bits(
+            list_of_bits=self.diagnostic_report
+        )
         gama_rate_binary = ""
         for frequency in frequency_of_individual_bits:
             max_index = frequency.index(max(frequency))
@@ -41,9 +43,7 @@ class BinaryDiagnostic:
 
     def __call__(self) -> int:
         gama_rate_binary = self.get_gamma_rate_binary()
-        epsilon_rate_binary = self.get_epsilon_rate_binary(gama_rate_binary=gama_rate_binary)
+        epsilon_rate_binary = self.get_epsilon_rate_binary(
+            gama_rate_binary=gama_rate_binary
+        )
         return int(gama_rate_binary, 2) * int(epsilon_rate_binary, 2)
-
-
-
-
