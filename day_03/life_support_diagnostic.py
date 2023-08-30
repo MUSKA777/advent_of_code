@@ -1,56 +1,63 @@
 from typing import List, Optional
 
 from day_03.binary_diagnostic import BinaryDiagnostic
+from day_03.data_class import InfoOfGeneratorRating
 
 
 class LifeSupportDiagnostic(BinaryDiagnostic):
     @staticmethod
-    def get_last_occurrence_index(
-        estimated_frequency: List[int], search_value: int
-    ) -> int:
-        new_estimated_frequency = estimated_frequency.copy()
-        new_estimated_frequency.reverse()
-        reverse_index = new_estimated_frequency.index(search_value)
-        last_index = len(new_estimated_frequency) - 1 - reverse_index
-        return last_index
+    def evaluate_values_satisfying_the_bit_on_the_location_index(
+        generator_info: InfoOfGeneratorRating,
+    ) -> List[str]:
+        between_grade_diagnosed_values = []
+        for _value in generator_info.diagnosed_values:
+            split_value = [*_value]
 
-    def get_generator_rating(
-        self, find_max_value: bool = True, find_min_value: bool = False
+            if split_value[generator_info.index] == str(generator_info.searched_bit):
+                between_grade_diagnosed_values.append(_value)
+
+        return between_grade_diagnosed_values
+
+    def get_return_the_value_satisfying_the_bits_on_the_location(
+        self, generator_info: InfoOfGeneratorRating
     ) -> Optional[str]:
         diagnosed_values = self.diagnostic_report.copy()
 
         for index in range(len(self.diagnostic_report)):
-            between_grade_diagnosed_values = []
+
             if len(diagnosed_values) == 1:
                 break
             frequency_of_individual_bits = self.get_frequency_of_individual_bits(
                 list_of_bits=diagnosed_values
             )
+            estimated_frequency = frequency_of_individual_bits[index]
+            generator_info.add_info_related_with_the_index(
+                estimated_frequency=estimated_frequency,
+                index=index,
+                diagnosed_values=diagnosed_values,
+            )
+            diagnosed_values = (
+                self.evaluate_values_satisfying_the_bit_on_the_location_index(
+                    generator_info
+                )
+            )
 
-            for _value in diagnosed_values.copy():
-                split_value = [*_value]
-                estimated_frequency = frequency_of_individual_bits[index]
-
-                if find_min_value:
-                    last_occurrence_index = estimated_frequency.index(
-                        min(estimated_frequency)
-                    )
-
-                elif find_max_value:
-                    last_occurrence_index = self.get_last_occurrence_index(
-                        estimated_frequency, max(estimated_frequency)
-                    )
-
-                else:
-                    raise Exception
-
-                if split_value[index] == str(last_occurrence_index):
-                    between_grade_diagnosed_values.append(_value)
-
-            diagnosed_values = between_grade_diagnosed_values.copy()
         return diagnosed_values[0] if diagnosed_values else None
 
-    def __call__(self, *args, **kwargs) -> int:
-        oxygen_generator_rating = self.get_generator_rating(find_max_value=True)
-        co2_scrubber_rating = self.get_generator_rating(find_min_value=True)
+    def get_oxygen_generator_rating(self) -> str:
+        generator_info_oxygen = InfoOfGeneratorRating(find_max_value=True)
+        return self.get_return_the_value_satisfying_the_bits_on_the_location(
+            generator_info=generator_info_oxygen
+        )
+
+    def get_co2_scrubber_rating(self) -> str:
+        generator_info_co2 = InfoOfGeneratorRating(find_min_value=True)
+        return self.get_return_the_value_satisfying_the_bits_on_the_location(
+            generator_info=generator_info_co2
+        )
+
+    def __call__(self) -> int:
+        oxygen_generator_rating = self.get_oxygen_generator_rating()
+        co2_scrubber_rating = self.get_co2_scrubber_rating()
+
         return int(oxygen_generator_rating, 2) * int(co2_scrubber_rating, 2)

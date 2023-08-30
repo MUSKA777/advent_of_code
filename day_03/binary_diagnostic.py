@@ -6,7 +6,7 @@ class BinaryDiagnostic:
         self.diagnostic_report = diagnostic_report
 
     @staticmethod
-    def get_frequency_of_individual_bits(list_of_bits: List[str]):
+    def get_frequency_of_individual_bits(list_of_bits: List[str]) -> List[List[int]]:
         frequency_of_individual_bits: List[List[int]] = []
         for _value in list_of_bits:
 

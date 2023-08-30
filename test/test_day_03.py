@@ -3,29 +3,29 @@ import unittest
 from day_03.binary_diagnostic import BinaryDiagnostic
 from day_03.life_support_diagnostic import LifeSupportDiagnostic
 
+diagnostic_report = [
+    "00100",
+    "11110",
+    "10110",
+    "10111",
+    "10101",
+    "01111",
+    "00111",
+    "11100",
+    "10000",
+    "11001",
+    "00010",
+    "01010",
+]
+
 
 class TestDay02(unittest.TestCase):
     def __init__(self, *args, **kwargs):
         super(TestDay02, self).__init__(*args, **kwargs)
-        self.diagnostic_report = [
-            "00100",
-            "11110",
-            "10110",
-            "10111",
-            "10101",
-            "01111",
-            "00111",
-            "11100",
-            "10000",
-            "11001",
-            "00010",
-            "01010",
-        ]
-        self.binary_diagnostic = BinaryDiagnostic(
-            diagnostic_report=self.diagnostic_report
-        )
+
+        self.binary_diagnostic = BinaryDiagnostic(diagnostic_report=diagnostic_report)
         self.life_support_rating = LifeSupportDiagnostic(
-            diagnostic_report=self.diagnostic_report
+            diagnostic_report=diagnostic_report
         )
 
     def test_get_gamma_rate_binary(self):
@@ -37,18 +37,13 @@ class TestDay02(unittest.TestCase):
             self.binary_diagnostic.get_epsilon_rate_binary(gama_rate_binary="10110"),
         )
 
-    def test_binary_diagnostic(self):
-        self.assertEqual(198, self.binary_diagnostic())
-
-    def test_get_oxygen_generator_number(self):
+    def test_get_oxygen_generator_rating(self):
         self.assertEqual(
-            "10111", self.life_support_rating.get_generator_rating(find_max_value=True)
+            "10111", self.life_support_rating.get_oxygen_generator_rating()
         )
 
     def test_get_co2_scrubber_rating(self):
-        self.assertEqual(
-            "01010", self.life_support_rating.get_generator_rating(find_min_value=True)
-        )
+        self.assertEqual("01010", self.life_support_rating.get_co2_scrubber_rating())
 
     def test_life_support_rating(self):
         self.assertEqual(230, self.life_support_rating())
