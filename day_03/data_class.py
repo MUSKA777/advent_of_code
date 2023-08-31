@@ -27,10 +27,6 @@ def find_the_bit(
     return search_bit
 
 
-# @dataclass
-# class SettingOfGenerator:
-
-
 @dataclass
 class InfoOfGeneratorRating:
     """Class for keeping track of an item in inventory."""
